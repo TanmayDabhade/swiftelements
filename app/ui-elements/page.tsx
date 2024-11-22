@@ -101,7 +101,7 @@ const Components: React.FC = () => {
              
                 <div className='bg-black'>
                   <h2 className="text-lg font-semibold mb-2 flex items-center">
-                    An infographic or resource displaying the component's functioning will be displayed here.
+                    An infographic or resource displaying the component&#39;s functioning will be displayed here.
                     
                   </h2>
                   {/* <pre className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-gray-200">{selectedComponent.usage}</pre> */}
