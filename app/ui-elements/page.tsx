@@ -64,7 +64,7 @@ const Components: React.FC = () => {
 
         {/* Documentation Panel */}
       
-        <main className="w-full flex p-6 justify-center align-middle items-center">
+        <main className="w-full flex p-6 justify-center align-top items-start">
           {selectedComponent ? (
             <div className='bg-black rounded-lg border from-white to-gray-300 p-10 w-2/3'>
               <h1 className="text-2xl font-bold mb-4">{selectedComponent.name}</h1>
@@ -73,7 +73,7 @@ const Components: React.FC = () => {
               {/* Usage Section */}
               {selectedComponent.usage && (
                 <div className='bg-black'>
-                  <h2 className="text-lg font-semibold mb-2 flex items-center">
+                  <h2 className="text-md font-semibold mb-2 flex items-center">
                     Usage
                     <CopyButton code={selectedComponent.usage} />
                   </h2>
@@ -84,10 +84,10 @@ const Components: React.FC = () => {
               {/* Code Section */}
               {selectedComponent.code && (
                 <>
-                  <h2 className="text-lg font-semibold mb-2 flex items-center py-6">
+                  <h2 className="text-md font-semibold mb-2 flex items-center py-6">
                     <CopyButton code={selectedComponent.code} />
                   </h2>
-                  <pre className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-lg text-gray-200">{selectedComponent.code}</pre>
+                  <pre className="bg-gray-800 p-4 rounded-lg border border-gray-700 text-md text-gray-200 overflow-scroll">{selectedComponent.code}</pre>
                 </>
               )}
             </div>

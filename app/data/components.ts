@@ -1,18 +1,136 @@
 export const componentDataExternal = [
-    // Category: Buttons
-    {
-        name: 'Directions',
-        category: 'Documentation',
-        description: 'Documentation of the selected component will be displayed here for users to refer. It is highly recommended to read the description thoroughly to understand the code and avoid any errors that might occur.',
-        usage: ``,
-        code: ``,
-      },
-    {
-      name: 'PrimaryButton',
-      category: 'Buttons',
-      description: 'The PrimaryButton is used for the main call-to-action in your app. It features bold styling to attract user attention and utilizes the app\'s accent color. The button text and action are customizable, and it adapts to light and dark modes using environment variables.',
-      usage: ``,
-      code: `
+  // Category: Buttons
+  {
+    name: "Directions",
+    category: "Documentation",
+    description:
+      "Documentation of the selected component will be displayed here for users to refer. It is highly recommended to read the description thoroughly to understand the code and avoid any errors that might occur.",
+    usage: ``,
+    code: ``,
+  },
+  {
+    name: "Bottom Sheet",
+    category: "Sheets",
+    description:
+      "This is a bottom sheet which appears on button click and can snap to three different positions. The user can drag the sheet to the desired position and release to snap to the nearest position. The sheet can be dismissed by clicking a button.",
+    usage: ``,
+    code: `import SwiftUI
+
+struct BottomSheetView<Content: View>: View {
+    @Binding var isPresented: Bool
+    @Binding var currentSnap: CGFloat
+    let maxSnap: CGFloat
+    let minSnap: CGFloat
+    let midSnap: CGFloat
+    let content: Content
+
+    init(isPresented: Binding<Bool>, currentSnap: Binding<CGFloat>, \n minSnap: CGFloat, midSnap: CGFloat, maxSnap: CGFloat, \n @ViewBuilder content: () -> Content) {
+        self._isPresented = isPresented
+        self._currentSnap = currentSnap
+        self.minSnap = minSnap
+        self.midSnap = midSnap
+        self.maxSnap = maxSnap
+        self.content = content()
+    }
+
+    var body: some View {
+        GeometryReader { geometry in
+            if isPresented {
+                VStack {
+                    Spacer()
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color(UIColor.systemBackground))
+                            .shadow(radius: 10)
+                        content
+                    }
+                    .frame(height: geometry.size.height * currentSnap)
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                let delta = value.translation.height / geometry.size.height
+                                currentSnap = max(minSnap, min(maxSnap, currentSnap - delta))
+                            }
+                            .onEnded { _ in
+                                snapToNearest()
+                            }
+                    )
+                }
+                .transition(.move(edge: .bottom))
+                .animation(.easeInOut)
+            }
+        }
+        .edgesIgnoringSafeArea(.all)
+    }
+
+    private func snapToNearest() {
+        let snapPoints = [minSnap, midSnap, maxSnap]
+        if let nearestSnap = snapPoints.min(by: { abs($0 - currentSnap) < abs($1 - currentSnap) }) {
+            currentSnap = nearestSnap
+        }
+    }
+}
+
+struct ContentView: View {
+    @State private var isSheetPresented = false
+    @State private var currentSnap: CGFloat = 0.3
+
+    var body: some View {
+        ZStack {
+            Button(action: {
+                isSheetPresented = true
+            }) {
+                Text("Show Bottom Sheet")
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+
+            BottomSheetView(
+                isPresented: $isSheetPresented,
+                currentSnap: $currentSnap,
+                minSnap: 0.3,
+                midSnap: 0.5,
+                maxSnap: 0.8
+            ) {
+                VStack {
+                    Text("This is a bottom sheet!")
+                        .font(.headline)
+                        .padding()
+                    Text("Drag me up or down.")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                    Button(action: {
+                        isSheetPresented = false
+                    }) {
+                        Text("Collapse Bottom Sheet")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                }
+                .padding()
+            }
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+`,
+  },
+  {
+    name: "PrimaryButton",
+    category: "Buttons",
+    description:
+      "The PrimaryButton is used for the main call-to-action in your app. It features bold styling to attract user attention and utilizes the app's accent color. The button text and action are customizable, and it adapts to light and dark modes using environment variables.",
+    usage: ``,
+    code: `
       // PrimaryButton.swift
       // YourApp
   
@@ -43,13 +161,14 @@ export const componentDataExternal = [
           }
       }
       `,
-    },
-    {
-      name: 'SecondaryButton',
-      category: 'Buttons',
-      description: 'The SecondaryButton is designed for secondary actions in your app. It has a less prominent style compared to the PrimaryButton, often featuring an outline or lighter color. The button supports custom text and actions and adapts to the environment\'s color scheme.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "SecondaryButton",
+    category: "Buttons",
+    description:
+      "The SecondaryButton is designed for secondary actions in your app. It has a less prominent style compared to the PrimaryButton, often featuring an outline or lighter color. The button supports custom text and actions and adapts to the environment's color scheme.",
+    usage: ``,
+    code: `
       // SecondaryButton.swift
       // YourApp
   
@@ -82,13 +201,14 @@ export const componentDataExternal = [
           }
       }
       `,
-    },
-    {
-      name: 'IconButton',
-      category: 'Buttons',
-      description: 'The IconButton displays an icon representing an action. It\'s useful for toolbar buttons or common actions like search, settings, or favorites. The component supports custom icons and actions, adjusting its appearance based on the environment\'s color scheme.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "IconButton",
+    category: "Buttons",
+    description:
+      "The IconButton displays an icon representing an action. It's useful for toolbar buttons or common actions like search, settings, or favorites. The component supports custom icons and actions, adjusting its appearance based on the environment's color scheme.",
+    usage: ``,
+    code: `
       // IconButton.swift
       // YourApp
   
@@ -120,13 +240,14 @@ export const componentDataExternal = [
           }
       }
       `,
-    },
-    {
-      name: 'RoundedButton',
-      category: 'Buttons',
-      description: 'The RoundedButton features fully rounded corners, giving it a pill-shaped appearance. It\'s ideal for actions requiring a softer look. The button supports custom text and actions and uses environment variables to adapt to different color schemes.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "RoundedButton",
+    category: "Buttons",
+    description:
+      "The RoundedButton features fully rounded corners, giving it a pill-shaped appearance. It's ideal for actions requiring a softer look. The button supports custom text and actions and uses environment variables to adapt to different color schemes.",
+    usage: ``,
+    code: `
       // RoundedButton.swift
       // YourApp
   
@@ -157,13 +278,14 @@ export const componentDataExternal = [
           }
       }
       `,
-    },
-    {
-      name: 'ToggleButton',
-      category: 'Buttons',
-      description: 'The ToggleButton represents a binary state (e.g., on/off). It changes appearance based on its state and uses environment variables to manage state and adapt to different color schemes.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "ToggleButton",
+    category: "Buttons",
+    description:
+      "The ToggleButton represents a binary state (e.g., on/off). It changes appearance based on its state and uses environment variables to manage state and adapt to different color schemes.",
+    usage: ``,
+    code: `
       // ToggleButton.swift
       // YourApp
   
@@ -192,15 +314,16 @@ export const componentDataExternal = [
           }
       }
       `,
-    },
-  
-    // Category: Cards
-    {
-      name: 'ProductCard',
-      category: 'Cards',
-      description: 'The ProductCard displays product information, including an image, name, and price. It\'s commonly used in e-commerce apps. This component uses environment objects to manage cart state and environment variables to adapt to different color schemes.',
-      usage: ``,
-      code: `
+  },
+
+  // Category: Cards
+  {
+    name: "ProductCard",
+    category: "Cards",
+    description:
+      "The ProductCard displays product information, including an image, name, and price. It's commonly used in e-commerce apps. This component uses environment objects to manage cart state and environment variables to adapt to different color schemes.",
+    usage: ``,
+    code: `
       // ProductCard.swift
       // YourApp
   
@@ -258,7 +381,7 @@ export const componentDataExternal = [
           var imageName: String
           var price: Double
   
-          static let example = Product(name: "Example Product", imageName: "example_image", price: 19.99)
+          static let example = Product(name: "Example Product", \n imageName: "example_image", price: 19.99)
       }
   
       class CartManager: ObservableObject {
@@ -269,13 +392,14 @@ export const componentDataExternal = [
           }
       }
       `,
-    },
-    {
-      name: 'UserProfileCard',
-      category: 'Cards',
-      description: 'The UserProfileCard displays a user\'s profile information, including avatar, name, and a brief bio. It\'s commonly used in social media apps. The component utilizes environment variables to adapt to different color schemes.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "UserProfileCard",
+    category: "Cards",
+    description:
+      "The UserProfileCard displays a user's profile information, including avatar, name, and a brief bio. It's commonly used in social media apps. The component utilizes environment variables to adapt to different color schemes.",
+    usage: ``,
+    code: `
       // UserProfileCard.swift
       // YourApp
   
@@ -321,16 +445,17 @@ export const componentDataExternal = [
           var avatarName: String
           var bio: String
   
-          static let example = User(name: "Jane Doe", avatarName: "avatar_jane", bio: "iOS Developer, Coffee Lover, Traveler.")
+          static let example = User(name: "Jane Doe", \n avatarName: "avatar_jane", bio: "iOS Developer, \n Coffee Lover, Traveler.")
       }
       `,
-    },
-    {
-      name: 'ArticleCard',
-      category: 'Cards',
-      description: 'The ArticleCard displays a summary of an article, including a title, image, and brief excerpt. It\'s used in news or blogging apps to provide a preview of articles. The component adapts to the environment\'s color scheme.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "ArticleCard",
+    category: "Cards",
+    description:
+      "The ArticleCard displays a summary of an article, including a title, image, and brief excerpt. It's used in news or blogging apps to provide a preview of articles. The component adapts to the environment's color scheme.",
+    usage: ``,
+    code: `
       // ArticleCard.swift
       // YourApp
   
@@ -376,16 +501,17 @@ export const componentDataExternal = [
           var excerpt: String
           var imageName: String
   
-          static let example = Article(title: "SwiftUI for Beginners", excerpt: "Learn how to build beautiful UIs with SwiftUI.", imageName: "swiftui_example")
+          static let example = Article(title: "SwiftUI for Beginners", \n excerpt: "Learn how to build beautiful UIs with SwiftUI.", \n imageName: "swiftui_example")
       }
       `,
-    },
-    {
-      name: 'WeatherCard',
-      category: 'Cards',
-      description: 'The WeatherCard displays weather information such as temperature, conditions, and an icon representing the current weather. It\'s useful in weather apps or any app displaying weather data. The component adapts to the user\'s color scheme.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "WeatherCard",
+    category: "Cards",
+    description:
+      "The WeatherCard displays weather information such as temperature, conditions, and an icon representing the current weather. It's useful in weather apps or any app displaying weather data. The component adapts to the user's color scheme.",
+    usage: ``,
+    code: `
       // WeatherCard.swift
       // YourApp
   
@@ -431,16 +557,17 @@ export const componentDataExternal = [
           var condition: String
           var iconName: String
   
-          static let example = Weather(city: "San Francisco", temperature: 68.5, condition: "Sunny", iconName: "sun.max.fill")
+          static let example = Weather(city: "San Francisco", temperature: 68.5, \n condition: "Sunny", iconName: "sun.max.fill")
       }
       `,
-    },
-    {
-      name: 'EventCard',
-      category: 'Cards',
-      description: 'The EventCard displays information about an event, including the title, date, location, and a brief description. It\'s useful in calendar or event management apps. The component adapts to the environment\'s color scheme.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "EventCard",
+    category: "Cards",
+    description:
+      "The EventCard displays information about an event, including the title, date, location, and a brief description. It's useful in calendar or event management apps. The component adapts to the environment's color scheme.",
+    usage: ``,
+    code: `
       // EventCard.swift
       // YourApp
   
@@ -497,18 +624,19 @@ export const componentDataExternal = [
           var location: String
           var description: String
   
-          static let example = Event(title: "SwiftUI Workshop", date: Date(), location: "Online", description: "Join us for an in-depth SwiftUI workshop where we'll build amazing apps.")
+          static let example = Event(title: "SwiftUI Workshop", \n date: Date(), location: "Online", \n description: "Join us for an in-depth SwiftUI workshop where we'll build amazing apps.")
       }
       `,
-    },
-  
-    // Category: Lists
-    {
-      name: 'SimpleList',
-      category: 'Lists',
-      description: 'The SimpleList displays a list of items using SwiftUI\'s List view. It demonstrates how to create a basic list with custom data models. It uses environment variables for theming and supports dynamic data.',
-      usage: ``,
-      code: `
+  },
+
+  // Category: Lists
+  {
+    name: "SimpleList",
+    category: "Lists",
+    description:
+      "The SimpleList displays a list of items using SwiftUI's List view. It demonstrates how to create a basic list with custom data models. It uses environment variables for theming and supports dynamic data.",
+    usage: ``,
+    code: `
       // SimpleList.swift
       // YourApp
   
@@ -530,13 +658,14 @@ export const componentDataExternal = [
           }
       }
       `,
-    },
-    {
-      name: 'SectionedList',
-      category: 'Lists',
-      description: 'The SectionedList displays a list of items grouped into sections. It demonstrates how to use List with sections and headers. The component adapts to the environment\'s color scheme and supports dynamic data.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "SectionedList",
+    category: "Lists",
+    description:
+      "The SectionedList displays a list of items grouped into sections. It demonstrates how to use List with sections and headers. The component adapts to the environment's color scheme and supports dynamic data.",
+    usage: ``,
+    code: `
       // SectionedList.swift
       // YourApp
   
@@ -549,7 +678,7 @@ export const componentDataExternal = [
               List {
                   ForEach(sections) { section in
                       Section(header: Text(section.title)) {
-                          ForEach(section.items, id: \\.self) { item in
+                          ForEach(section.items, \n id: \\.self) { item in
                               Text(item)
                           }
                       }
@@ -561,8 +690,8 @@ export const componentDataExternal = [
       struct SectionedList_Previews: PreviewProvider {
           static var previews: some View {
               SectionedList(sections: [
-                  SectionData(title: "Fruits", items: ["Apple", "Banana", "Cherry"]),
-                  SectionData(title: "Vegetables", items: ["Carrot", "Lettuce", "Tomato"])
+                  SectionData(title: "Fruits", \n items: ["Apple", "Banana", "Cherry"]),
+                  SectionData(title: "Vegetables", \n items: ["Carrot", "Lettuce", "Tomato"])
               ])
           }
       }
@@ -575,13 +704,14 @@ export const componentDataExternal = [
           var items: [String]
       }
       `,
-    },
-    {
-      name: 'SwipeableList',
-      category: 'Lists',
-      description: 'The SwipeableList demonstrates how to add swipe actions to list items, such as delete or edit actions. It uses environment variables for theming and supports dynamic data with item removal.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "SwipeableList",
+    category: "Lists",
+    description:
+      "The SwipeableList demonstrates how to add swipe actions to list items, such as delete or edit actions. It uses environment variables for theming and supports dynamic data with item removal.",
+    usage: ``,
+    code: `
       // SwipeableList.swift
       // YourApp
   
@@ -610,13 +740,14 @@ export const componentDataExternal = [
           }
       }
       `,
-    },
-    {
-      name: 'EditableList',
-      category: 'Lists',
-      description: 'The EditableList allows users to edit the list by adding or removing items. It demonstrates how to enable editing mode in a list. It uses environment variables for theming and supports dynamic data.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "EditableList",
+    category: "Lists",
+    description:
+      "The EditableList allows users to edit the list by adding or removing items. It demonstrates how to enable editing mode in a list. It uses environment variables for theming and supports dynamic data.",
+    usage: ``,
+    code: `
       // EditableList.swift
       // YourApp
   
@@ -650,13 +781,14 @@ export const componentDataExternal = [
           }
       }
       `,
-    },
-    {
-      name: 'GridList',
-      category: 'Lists',
-      description: 'The GridList displays items in a grid format using SwiftUI\'s LazyVGrid. It demonstrates how to create grid layouts with dynamic data. It uses environment variables for theming and adapts to different screen sizes.',
-      usage: ``,
-      code: `
+  },
+  {
+    name: "GridList",
+    category: "Lists",
+    description:
+      "The GridList displays items in a grid format using SwiftUI's LazyVGrid. It demonstrates how to create grid layouts with dynamic data. It uses environment variables for theming and adapts to different screen sizes.",
+    usage: ``,
+    code: `
       // GridList.swift
       // YourApp
   
@@ -691,7 +823,7 @@ export const componentDataExternal = [
           }
       }
       `,
-    },
-  
-    // Additional categories would follow the same structure...
-  ];
+  },
+
+  // Additional categories would follow the same structure...
+];

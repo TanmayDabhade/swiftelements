@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
         <li>
           <a
             href="#"
-            className="hover:text-white transition"
+            className="disabled:opacity-100 hover:text-gray-600 transition"
           >
             Docs
           </a>
